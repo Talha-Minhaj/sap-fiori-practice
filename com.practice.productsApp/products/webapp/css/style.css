@@ -1,0 +1,11 @@
+/* Enterprise Fiori Product Manager Styles */
+
+/* Ensure the DynamicPage fills the full viewport height */
+.sapFDynamicPage {
+    height: 100%;
+}
+
+/* Slight padding for table content area */
+.sapUiTableCellInner {
+    padding: 0.25rem 0.5rem;
+}

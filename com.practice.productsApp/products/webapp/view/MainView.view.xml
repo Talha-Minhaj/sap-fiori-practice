@@ -1,0 +1,175 @@
+<mvc:View controllerName="products.controller.MainView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    xmlns:t="sap.ui.table"
+    xmlns:l="sap.ui.layout"
+    displayBlock="true">
+
+    <f:DynamicPage id="dynamicPage" headerExpanded="true" toggleHeaderOnTitleClick="true">
+
+        <!-- ===== Title Area ===== -->
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title id="pageTitle" text="Products" level="H1" />
+                </f:heading>
+                <f:snappedHeading>
+                    <Title id="snappedTitle" text="{/productCount} Products" level="H2" />
+                </f:snappedHeading>
+                <f:actions>
+                    <Button id="createProductBtn"
+                        text="Create"
+                        icon="sap-icon://add"
+                        type="Emphasized"
+                        press="onOpenCreateDialog" />
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- ===== Header (collapsible) ===== -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <HBox fitContainer="true" alignItems="Center" class="sapUiSmallMarginBottom">
+                    <SearchField id="searchField"
+                        placeholder="Search by Product Name..."
+                        liveChange="onSearch"
+                        width="100%" />
+                </HBox>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!-- ===== Content: Grid Table ===== -->
+        <f:content>
+            <t:Table id="productsTable"
+                rows="{/products}"
+                selectionMode="None"
+                alternateRowColors="true"
+                visibleRowCountMode="Auto"
+                minAutoRowCount="5"
+                busyIndicatorDelay="0"
+                noData="No Products Found"
+                rowActionCount="2">
+
+                <t:rowActionTemplate>
+                    <t:RowAction>
+                        <t:items>
+                            <t:RowActionItem icon="sap-icon://edit" text="Edit" press="onEditProduct" />
+                            <t:RowActionItem icon="sap-icon://delete" text="Delete" type="Custom" press="onDeleteProduct" />
+                        </t:items>
+                    </t:RowAction>
+                </t:rowActionTemplate>
+
+                <t:columns>
+                    <t:Column width="5rem" sortProperty="id" filterProperty="id">
+                        <Label text="ID" />
+                        <t:template>
+                            <Text text="{id}" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column width="auto" sortProperty="ProductName" filterProperty="ProductName">
+                        <Label text="Product Name" />
+                        <t:template>
+                            <Text text="{ProductName}" wrapping="false" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column width="8rem" hAlign="End" sortProperty="UnitPrice" filterProperty="UnitPrice">
+                        <Label text="Unit Price" />
+                        <t:template>
+                            <Text text="{ path: 'UnitPrice', formatter: '.formatter.formatPrice' }" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column width="8rem" hAlign="End" sortProperty="UnitsInStock" filterProperty="UnitsInStock">
+                        <Label text="Units In Stock" />
+                        <t:template>
+                            <Text text="{UnitsInStock}" />
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column width="8rem" hAlign="Center">
+                        <Label text="Status" />
+                        <t:template>
+                            <ObjectStatus
+                                text="{ path: 'UnitsInStock', formatter: '.formatter.stockStatusText' }"
+                                state="{ path: 'UnitsInStock', formatter: '.formatter.stockStatusState' }" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </f:content>
+
+        <!-- ===== Dialogs ===== -->
+        <f:dependents>
+            <!-- Create Dialog -->
+            <Dialog id="createProductDialog" title="Create New Product" contentWidth="400px">
+                <content>
+                    <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                        <Label text="Product Name" required="true" labelFor="inputProductName" />
+                        <Input id="inputProductName"
+                            placeholder="e.g. Chai Tea"
+                            valueLiveUpdate="true"
+                            liveChange="onCreateInputChange" />
+
+                        <Label text="Unit Price (USD)" required="true" labelFor="inputUnitPrice" class="sapUiSmallMarginTop" />
+                        <Input id="inputUnitPrice"
+                            placeholder="e.g. 19.99"
+                            type="Number"
+                            valueLiveUpdate="true"
+                            liveChange="onCreateInputChange" />
+
+                        <Label text="Units In Stock" required="true" labelFor="inputUnitsInStock" class="sapUiSmallMarginTop" />
+                        <Input id="inputUnitsInStock"
+                            placeholder="e.g. 50"
+                            type="Number"
+                            valueLiveUpdate="true"
+                            liveChange="onCreateInputChange" />
+                    </l:VerticalLayout>
+                </content>
+                <beginButton>
+                    <Button text="Save" type="Emphasized" press="onSaveProduct" />
+                </beginButton>
+                <endButton>
+                    <Button text="Cancel" press="onCancelCreate" />
+                </endButton>
+            </Dialog>
+
+            <!-- Edit Dialog -->
+            <Dialog id="editProductDialog" title="Edit Product" contentWidth="400px">
+                <content>
+                    <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                        <Label text="Product Name" required="true" labelFor="editProductName" />
+                        <Input id="editProductName"
+                            placeholder="e.g. Chai Tea"
+                            valueLiveUpdate="true"
+                            liveChange="onEditInputChange" />
+
+                        <Label text="Unit Price (USD)" required="true" labelFor="editUnitPrice" class="sapUiSmallMarginTop" />
+                        <Input id="editUnitPrice"
+                            placeholder="e.g. 19.99"
+                            type="Number"
+                            valueLiveUpdate="true"
+                            liveChange="onEditInputChange" />
+
+                        <Label text="Units In Stock" required="true" labelFor="editUnitsInStock" class="sapUiSmallMarginTop" />
+                        <Input id="editUnitsInStock"
+                            placeholder="e.g. 50"
+                            type="Number"
+                            valueLiveUpdate="true"
+                            liveChange="onEditInputChange" />
+                    </l:VerticalLayout>
+                </content>
+                <beginButton>
+                    <Button text="Update" type="Emphasized" press="onUpdateProduct" />
+                </beginButton>
+                <endButton>
+                    <Button text="Cancel" press="onCancelEdit" />
+                </endButton>
+            </Dialog>
+        </f:dependents>
+    </f:DynamicPage>
+</mvc:View>
+

@@ -1,0 +1,16 @@
+{
+  "generator-ui5-project": {
+    "namespaceUI5": "com.practice",
+    "projectName": "productsApp",
+    "uimoduleName": "products",
+    "enableFPM": false,
+    "platform": "Static webserver",
+    "ui5Libs": "Content delivery network (SAPUI5)",
+    "newDir": true,
+    "initRepo": true,
+    "projectId": "com.practice.productsApp",
+    "uimodules": [
+      "products"
+    ]
+  }
+}

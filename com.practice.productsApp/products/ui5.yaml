@@ -1,0 +1,33 @@
+specVersion: "3.1"
+metadata:
+  name: products
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://ui5.sap.com
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+    - name: preview-middleware
+      afterMiddleware: compression
+      configuration:
+        test:
+          - framework: Qunit
+          - framework: OPA5
+    - name: fiori-tools-mockserver
+      afterMiddleware: compression
+      configuration:
+        mcpServers:
+          products-srv:
+            url: http://localhost:3001
